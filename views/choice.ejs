@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Plan</title>
+    <!-- Bootstrap CSS (Assuming you are using Bootstrap for styling) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .option-container {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Choose Your Plan</h1>
+
+    <div class="option-container">
+        <h3>Select a Plan:</h3>
+        <form action="/select-plan" method="POST">
+            <div class="form-group">
+                <label><input type="radio" name="planType" value="workout"> Workout Plan</label>
+            </div>
+            <div class="form-group">
+                <label><input type="radio" name="planType" value="meal"> Meal Plan</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Next</button>
+        </form>
+    </div>
+
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
