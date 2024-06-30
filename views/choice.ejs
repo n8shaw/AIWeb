@@ -16,11 +16,22 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        .caloric-needs {
+            text-align: center;
+            margin-top: 20px; /* Adjust as needed */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
+
+
+
     <h1>Choose Your Plan</h1>
 
     <div class="option-container">
@@ -35,11 +46,18 @@
             <button type="submit" class="btn btn-primary">Next</button>
         </form>
     </div>
-
+    <div class="container mt-4">
+        <div class="caloric-needs">
+            <h2>Your Daily Caloric Needs</h2>
+            <h1><%= dailyCalories %></h1>
+        </div>
+    </div>
 </div>
 
 <!-- Bootstrap JS and dependencies -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

@@ -85,15 +85,21 @@ app.get('/generate', async (req, res) => {
 
     // Function to preprocess text for HTML formatting
     function preprocessText(text) {
-        // Example preprocessing: Replace asterisks with list items
-        text = text.replace(/\*\*/g, '<ul><li>');
+        // Replace three asterisks (***)
+        text = text.replace(/\*\*\*/g, '</ul><ul><li>');
+    
+        // Replace two asterisks (**) with list items
+        text = text.replace(/\*\*/g, '<li>');
+    
+        // Replace single asterisk (*) with closing list item
         text = text.replace(/\* /g, '</li><li>');
-        text += '</li></ul>';
-
-        // Add more preprocessing as needed (e.g., add line breaks, headings, etc.)
-
+    
+        // Add wrapping unordered list tags
+        text = '<ul>' + text + '</li></ul>';
+    
         return text;
     }
+    
 
     // Call the function to fetch data and render the page
     callGeminiAPI();
@@ -101,8 +107,38 @@ app.get('/generate', async (req, res) => {
 
 // Route for the choose plan page
 app.get('/choice', (req, res) => {
-    res.render('choice'); // Render the choose-plan.ejs page
+    let data = req.session.surveyData;
+
+    if (!data) {
+        return res.redirect('/'); // Redirect to home if data is missing
+    }
+
+    const { gender, height, weight, age, activityLevel } = data;
+
+    // Calculate BMR using Mifflin-St Jeor Equation
+    let bmr;
+    if (gender === 'male') {
+        bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+    } else {
+        bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+    }
+
+    // Determine activity multiplier
+    const activityMultipliers = {
+        sedentary: 1.2,
+        lightly_active: 1.375,
+        moderately_active: 1.55,
+        very_active: 1.725,
+        super_active: 1.9
+    };
+
+    const multiplier = activityMultipliers[activityLevel] || 1.2;
+    const dailyCalories = Math.round(bmr * multiplier);
+
+    // Render the 'choice' page with calculated calories
+    res.render('choice', { dailyCalories });
 });
+
 
 // Route to handle plan selection form submission
 app.post('/select-plan', (req, res) => {
@@ -149,10 +185,11 @@ app.post('/submit-meals', (req, res) => {
 });
 
 app.post('/submit-survey', (req, res) => {
-    const { height, weight, age, activityLevel, goal } = req.body;
+    const { gender, height, weight, age, activityLevel, goal } = req.body;
 
     // Store survey data in session
     req.session.surveyData = {
+        gender,
         height: parseFloat(height),
         weight: parseFloat(weight),
         age: parseInt(age),
@@ -160,9 +197,10 @@ app.post('/submit-survey', (req, res) => {
         goal
     };
 
-    // Optionally, you can redirect or send a response
+    // Redirect to the choice page
     res.redirect('/choice');
 });
+
 
 // app.post('/submit', async (req, res) => {
 //   const prompt = req.body.prompt;
